@@ -1,6 +1,6 @@
-# Penal Code Discord Bot
+# Western Skies RP Penal Code Discord Bot
 
-A Discord bot that provides penal codes and sentences for various crimes. The bot supports smart recognition for natural language inputs and can be deployed to Cloudflare Workers.
+A Discord bot for Western Skies RP RedM server that provides penal codes and sentences for various crimes. The bot supports smart recognition for natural language inputs and can be deployed to Cloudflare Workers.
 
 ## Features
 
