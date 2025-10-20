@@ -52,6 +52,7 @@ A Discord bot for Western Skies RP RedM server that provides penal codes and sen
 - Node.js 18+
 - Discord Application (Bot Token, Public Key, Application ID)
 - Cloudflare Account (for Workers deployment)
+- Download the penal code and save it as .csv file from Google Sheet
 
 ### Local Development
 
