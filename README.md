@@ -95,7 +95,10 @@ A Discord bot for Western Skies RP RedM server that provides penal codes and sen
    npx wrangler deploy
    ```
 
-5. Register Discord commands:
+5. Get your Application ID and Public Key (See Discord Application Setup)
+
+
+6. Register Discord commands:
    ```bash
    npm register-commands.js
    ```
