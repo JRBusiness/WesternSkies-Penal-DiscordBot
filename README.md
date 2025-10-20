@@ -126,7 +126,6 @@ WesternSkies-Penal-DiscordBot/
 ├── worker.js                 # Cloudflare Worker entry point
 ├── penal-processor.js        # Local penal code processor
 ├── penal-processor-worker.js # Worker penal code processor
-├── deploy-commands.js        # Command registration script
 ├── package.json             # Dependencies
 ├── wrangler.toml            # Cloudflare Workers config
 ├── penal.csv               # Penal code data
