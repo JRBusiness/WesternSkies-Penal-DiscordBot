@@ -1,0 +1,32 @@
+{
+  "name": "penal-code-discord-bot",
+  "version": "1.0.0",
+  "description": "Discord bot for penal code lookups with robbery shortcuts",
+  "main": "bot.js",
+  "type": "module",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js",
+    "setup": "node setup-discord.js",
+    "deploy": "wrangler deploy",
+    "dev-worker": "wrangler dev"
+  },
+  "dependencies": {
+    "discord.js": "^14.0.0",
+    "discord-interactions": "^3.4.0",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0",
+    "wrangler": "^4.38.0"
+  },
+  "keywords": [
+    "discord-bot",
+    "penal-codes",
+    "law-enforcement",
+    "roleplay",
+    "gaming"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

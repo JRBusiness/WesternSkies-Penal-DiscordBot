@@ -1,0 +1,13 @@
+name = "penal-code-discord-bot"
+main = "worker.js"
+compatibility_date = "2024-09-20"
+
+# Environment variables (set these via wrangler secret)
+# DISCORD_PUBLIC_KEY = "your_public_key_here"
+
+# All penal code data is embedded in the worker JavaScript files
+# No KV storage needed
+
+[vars]
+# You can add non-secret environment variables here if needed
+
