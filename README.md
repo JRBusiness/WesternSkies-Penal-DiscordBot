@@ -97,7 +97,7 @@ A Discord bot for Western Skies RP RedM server that provides penal codes and sen
 
 5. Register Discord commands:
    ```bash
-   node deploy-commands.js
+   npm register-commands.js
    ```
 
 ## Configuration
@@ -129,6 +129,7 @@ WesternSkies-Penal-DiscordBot/
 ├── package.json             # Dependencies
 ├── wrangler.toml            # Cloudflare Workers config
 ├── penal.csv               # Penal code data
+├── register-commands.js    # Registering slash commands for the bot
 └── README.md               # This file
 ```
 
