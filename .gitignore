@@ -197,3 +197,6 @@ wrangler.toml.bak
 *.token
 *.key
 secrets.json
+
+
+*.csv
