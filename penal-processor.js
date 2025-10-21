@@ -205,8 +205,8 @@ export class PenalCodeProcessor {
       'drug deal': 'intent/distribution of illegal contraband',
       'selling drugs': 'intent/distribution of illegal contraband',
       'sell drugs': 'intent/distribution of illegal contraband',
-      'selling drug': 'intent/distribution of illegal contraband',
       'sell drug': 'intent/distribution of illegal contraband',
+      'selling drug': 'intent/distribution of illegal contraband',
       'distribute drugs': 'intent/distribution of illegal contraband',
       'selling cocaine': 'intent/distribution of illegal contraband',
       'selling meth': 'intent/distribution of illegal contraband',
@@ -216,6 +216,15 @@ export class PenalCodeProcessor {
       'selling ketamine': 'intent/distribution of illegal contraband',
       'selling moonshine': 'intent/distribution of illegal contraband',
       'selling k': 'intent/distribution of illegal contraband',
+      'carry drugs': 'possession of illegal contraband',
+      'carry cocaine': 'possession of illegal contraband',
+      'carry meth': 'possession of illegal contraband',
+      'carry heroin': 'possession of illegal contraband',
+      'carry weed': 'possession of illegal contraband',
+      'carry opioids': 'possession of illegal contraband',
+      'carry ketamine': 'possession of illegal contraband',
+      'carry moonshine': 'possession of illegal contraband',
+      'carry k': 'possession of illegal contraband',
       'carrying drugs': 'possession of illegal contraband',
       'carrying cocaine': 'possession of illegal contraband',
       'carrying meth': 'possession of illegal contraband',
@@ -269,16 +278,10 @@ export class PenalCodeProcessor {
       'reckless riding': 'reckless endangerment',
       'ride recklessly': 'reckless endangerment',
       'ride recklessly in town': 'reckless endangerment',
-      'ride recklessly': 'reckless endangerment',
       'reckless driving in town': 'reckless endangerment',
       'reckless driving': 'reckless endangerment',
       'drive recklessly': 'reckless endangerment',
       'drive recklessly in town': 'reckless endangerment',
-      'drive recklessly': 'reckless endangerment',
-      'reckless driving': 'reckless endangerment',
-      'drive recklessly': 'reckless endangerment',
-      'drive recklessly in town': 'reckless endangerment',
-      'drive recklessly': 'reckless endangerment',
       'riding fast in town': 'reckless endangerment',
       'driving fast in town': 'reckless endangerment',
 
@@ -290,6 +293,7 @@ export class PenalCodeProcessor {
       
       'road blocking': 'loitering/obstruction of traffic',
       'blocking traffic': 'loitering/obstruction of traffic',
+
 
     };
 
