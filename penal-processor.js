@@ -95,6 +95,23 @@ export class PenalCodeProcessor {
     return codeMap[crime.toLowerCase()] || 'PC-XXX';
   }
 
+  // Method to handle multiple crimes separated by commas
+  findMultiplePenalCodes(input) {
+    const crimes = input.split(',').map(crime => crime.trim());
+    const results = [];
+    
+    for (const crime of crimes) {
+      if (crime) {
+        const result = this.findRobberyPenalCode(crime);
+        if (result) {
+          results.push(result);
+        }
+      }
+    }
+    
+    return results.length > 0 ? results : null;
+  }
+
   // Main method to find penal code with smart recognition
   findRobberyPenalCode(input) {
     const normalizedInput = input.toLowerCase().trim();
@@ -135,15 +152,15 @@ export class PenalCodeProcessor {
       'pickpocket': 'unarmed robbery',
       'snatch': 'unarmed robbery',
       
-      'kidnap': 'kidnapping',
-      // Kidnapping variations
-      'kidnap law': 'kidnapping of a government official',
-      'kidnap gov': 'kidnapping of a government official',
-      'kidnap cop': 'kidnapping of a government official',
-      'kidnap officer': 'kidnapping of a government official',
-      'kidnap official': 'kidnapping of a government official',
-      'kidnap government': 'kidnapping of a government official',
       
+      // Kidnapping variations
+      'kidnap law': 'Kidnapping of a Government Official',
+      'kidnap gov': 'Kidnapping of a Government Official',
+      'kidnap cop': 'Kidnapping of a Government Official',
+      'kidnap officer': 'Kidnapping of a Government Official',
+      'kidnap official': 'Kidnapping of a Government Official',
+      'kidnap government': 'Kidnapping of a Government Official',
+      'kidnap': 'kidnapping',
       // Murder attempts
       'attempt murder': 'attempted murder',
       'attempted murder': 'attempted murder',
@@ -201,43 +218,34 @@ export class PenalCodeProcessor {
       'murder officer': 'capital murder',
       
       // Drug related
-      'drug dealing': 'intent/distribution of illegal contraband',
-      'drug deal': 'intent/distribution of illegal contraband',
-      'selling drugs': 'intent/distribution of illegal contraband',
-      'sell drugs': 'intent/distribution of illegal contraband',
-      'sell drug': 'intent/distribution of illegal contraband',
-      'selling drug': 'intent/distribution of illegal contraband',
-      'distribute drugs': 'intent/distribution of illegal contraband',
-      'selling cocaine': 'intent/distribution of illegal contraband',
-      'selling meth': 'intent/distribution of illegal contraband',
-      'selling heroin': 'intent/distribution of illegal contraband',
-      'selling weed': 'intent/distribution of illegal contraband',
-      'selling opioids': 'intent/distribution of illegal contraband',
-      'selling ketamine': 'intent/distribution of illegal contraband',
-      'selling moonshine': 'intent/distribution of illegal contraband',
-      'selling k': 'intent/distribution of illegal contraband',
-      'carry drugs': 'possession of illegal contraband',
-      'carry cocaine': 'possession of illegal contraband',
-      'carry meth': 'possession of illegal contraband',
-      'carry heroin': 'possession of illegal contraband',
-      'carry weed': 'possession of illegal contraband',
-      'carry opioids': 'possession of illegal contraband',
-      'carry ketamine': 'possession of illegal contraband',
-      'carry moonshine': 'possession of illegal contraband',
-      'carry k': 'possession of illegal contraband',
-      'carrying drugs': 'possession of illegal contraband',
-      'carrying cocaine': 'possession of illegal contraband',
-      'carrying meth': 'possession of illegal contraband',
-      'carrying heroin': 'possession of illegal contraband',
-      'carrying weed': 'possession of illegal contraband',
-      'carrying opioids': 'possession of illegal contraband',
-      'carrying ketamine': 'possession of illegal contraband',
-      'carrying moonshine': 'possession of illegal contraband',
-      'carrying k': 'possession of illegal contraband',
-      'drug possession': 'possession of illegal contraband',
-      'possess drugs': 'possession of illegal contraband',
-      'drug manufacture': 'manufacture of contraband',
-      'making drugs': 'manufacture of contraband',
+      'drug dealing': 'Intent/Distribution of Illegal Contraband',
+      'drug deal': 'Intent/Distribution of Illegal Contraband',
+      'selling drugs': 'Intent/Distribution of Illegal Contraband',
+      'sell drugs': 'Intent/Distribution of Illegal Contraband',
+      'selling drug': 'Intent/Distribution of Illegal Contraband',
+      'sell drug': 'Intent/Distribution of Illegal Contraband',
+      'distribute drugs': 'Intent/Distribution of Illegal Contraband',
+      'selling cocaine': 'Intent/Distribution of Illegal Contraband',
+      'selling meth': 'Intent/Distribution of Illegal Contraband',
+      'selling heroin': 'Intent/Distribution of Illegal Contraband',
+      'selling weed': 'Intent/Distribution of Illegal Contraband',
+      'selling opioids': 'Intent/Distribution of Illegal Contraband',
+      'selling ketamine': 'Intent/Distribution of Illegal Contraband',
+      'selling moonshine': 'Intent/Distribution of Illegal Contraband',
+      'selling k': 'Intent/Distribution of Illegal Contraband',
+      'carrying drugs': 'Possession of Illegal Contrabands',
+      'carrying cocaine': 'Possession of Illegal Contrabands',
+      'carrying meth': 'Possession of Illegal Contrabands',
+      'carrying heroin': 'Possession of Illegal Contrabands',
+      'carrying weed': 'Possession of Illegal Contrabands',
+      'carrying opioids': 'Possession of Illegal Contrabands',
+      'carrying ketamine': 'Possession of Illegal Contrabands',
+      'carrying moonshine': 'Possession of Illegal Contrabands',
+      'carrying k': 'Possession of Illegal Contrabands',
+      'drug possession': 'Possession of Illegal Contrabands',
+      'possess drugs': 'Possession of Illegal Contrabands',
+      'drug manufacture': 'Manufacture of Contrabands',
+      'making drugs': 'Manufacture of Contrabands',
       
       // Arrest resistance
       'resist arrest': 'evading or resisting arrest',
@@ -293,7 +301,6 @@ export class PenalCodeProcessor {
       
       'road blocking': 'loitering/obstruction of traffic',
       'blocking traffic': 'loitering/obstruction of traffic',
-
 
     };
 

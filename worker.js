@@ -94,6 +94,57 @@ function handlePenalCommand(interaction) {
     return createErrorResponse('Please provide a crime type to look up');
   }
   
+  // Check if input contains multiple crimes (comma-separated)
+  if (crimeInput.includes(',')) {
+    const multipleResults = penalProcessor.findMultiplePenalCodes(crimeInput);
+    
+    if (!multipleResults || multipleResults.length === 0) {
+      const embed = {
+        color: 0xff0000,
+        title: 'No Matches Found',
+        description: `No penal codes found for "${crimeInput}"`,
+        fields: [{
+          name: 'Try These Commands',
+          value: [
+            '• `bank rob` or `rob bank` - Major Armed Robbery',
+            '• `store rob` or `rob store` - Armed Robbery',
+            '• `church rob` - Major Armed Robbery',
+            '• `forge rob` - Major Armed Robbery',
+            '• Use `/penal-search` to search by keyword',
+            '• Use `/penal-help` for more help'
+          ].join('\n')
+        }],
+        timestamp: new Date().toISOString()
+      };
+      
+      return createSuccessResponse({ embeds: [embed], flags: 64 }); // EPHEMERAL
+    }
+
+    // Handle multiple crimes
+    const embed = {
+      color: 0xdc143c,
+      title: `Multiple Penal Codes (${multipleResults.length} found)`,
+      description: `Found ${multipleResults.length} penal codes for your crimes:`,
+      fields: [],
+      footer: {
+        text: `Search terms: "${crimeInput}"`
+      },
+      timestamp: new Date().toISOString()
+    };
+
+    multipleResults.forEach((penalData, index) => {
+      const formatted = penalProcessor.formatPenalCode(penalData);
+      embed.fields.push({
+        name: `${index + 1}. ${formatted.title}`,
+        value: `**${formatted.months} months** imprisonment and **${formatted.fine}** fine`,
+        inline: false
+      });
+    });
+
+    return createSuccessResponse({ embeds: [embed] });
+  }
+
+  // Handle single crime (existing logic)
   const penalData = penalProcessor.findRobberyPenalCode(crimeInput);
   
   if (!penalData) {
@@ -288,6 +339,7 @@ function handleHelpCommand(interaction) {
           '`/penal bank rob` - Get Major Armed Robbery',
           '`/penal store rob` - Get Armed Robbery',
           '`/penal murder` - Get Murder charges',
+          '`/penal rob bank, kidnap gov, carrying heroin` - Multiple crimes',
           '`/penal-code 001` - Look up PC-001 (Capital Murder)',
           '`/penal-code 010` - Look up PC-010 (Major Armed Robbery)',
           '`/penal-search assault` - Search for assault crimes'
