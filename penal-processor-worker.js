@@ -1,47 +1,49 @@
 // Embedded penal code data (no file system access in Cloudflare Workers)
+// Data matches data.csv structure: Penal Code #, Crime, Months, Fine, Description
 const PENAL_DATA = [
-  { crime: 'Capital Murder', months: 60, fine: 20000, class: '' },
-  { crime: 'Murder', months: 60, fine: 10000, class: '' },
-  { crime: 'Attempted Capital Murder', months: 45, fine: 3000, class: '' },
-  { crime: 'Attempted Murder', months: 35, fine: 2000, class: '' },
-  { crime: 'Aggravated Assault', months: 30, fine: 2000, class: '' },
-  { crime: 'Torture', months: 40, fine: 2000, class: '' },
-  { crime: 'Serial Crime', months: 35, fine: 'Judge Discretion', class: '' },
-  { crime: 'Kidnapping of a Government Official', months: 35, fine: 2000, class: '' },
-  { crime: 'Kidnapping', months: 25, fine: 900, class: '' },
-  { crime: 'Major Armed Robbery', months: 30, fine: 3550, class: '' },
-  { crime: 'Armed Robbery', months: 25, fine: 950, class: '' },
-  { crime: 'Unarmed Robbery', months: 20, fine: 900, class: '' },
-  { crime: 'Arson', months: 25, fine: 850, class: '' },
-  { crime: 'Terrorism', months: 50, fine: 2500, class: '' },
-  { crime: 'Riot', months: 30, fine: 2000, class: '' },
-  { crime: 'Government Corruption', months: 'Judge Discretion', fine: 'Judge Discretion', class: '' },
-  { crime: 'Extortion', months: 'Judge Discretion', fine: 'Judge Discretion', class: '' },
-  { crime: 'Bribery to a Government Official', months: 20, fine: 550, class: '' },
-  { crime: 'Vigilantism', months: 15, fine: 850, class: '' },
-  { crime: 'Escaping From Custody', months: 30, fine: 1500, class: '' },
-  { crime: 'Intent/Distribution of Illegal Contraband', months: 25, fine: 800, class: '' },
-  { crime: 'Possession of Illegal Contraband', months: 10, fine: 650, class: '' },
-  { crime: 'Manufacture of Contraband', months: 20, fine: 750, class: '' },
-  { crime: 'Unarmed Assault', months: 10, fine: 550, class: '' },
-  { crime: 'Evading or Resisting Arrest', months: 15, fine: 750, class: '' },
-  { crime: 'Aiding and Abetting', months: 10, fine: 800, class: '' },
-  { crime: 'Obstruction of Justice', months: 10, fine: 600, class: '' },
-  { crime: 'False Impersonation', months: 15, fine: 600, class: '' },
-  { crime: 'Reckless Endangerment', months: 15, fine: 600, class: '' },
-  { crime: 'Destruction of Property', months: 15, fine: 650, class: '' },
-  { crime: 'Providing False Information', months: 10, fine: 750, class: '' },
-  { crime: 'Harassment', months: 15, fine: 750, class: '' },
-  { crime: 'Disregarding a Lawful Order/Town Ordinance', months: 15, fine: 750, class: '' },
-  { crime: 'Negligent Discharge of a Firearm', months: 15, fine: 650, class: '' },
-  { crime: 'Cruelty to Domesticated Animals', months: 10, fine: 600, class: '' },
-  { crime: 'Conspiracy to Commit Any Act of Crime', months: 15, fine: 800, class: '' },
-  { crime: 'Disorderly Conduct', months: 10, fine: 650, class: '' },
-  { crime: 'Disturbing the Peace', months: 10, fine: 650, class: '' },
-  { crime: 'Trespassing', months: 10, fine: 600, class: '' },
-  { crime: 'Improper Commercial Sales', months: 10, fine: 600, class: '' },
-  { crime: 'Illegal Panning/Mining', months: 15, fine: 600, class: '' },
-  { crime: 'Loitering/Obstruction of Traffic', months: 10, fine: 600, class: '' }
+  { code: 'P.C. 201', crime: 'Capital Murder', months: 60, fine: 20000, description: 'Murder of a government official such as a doctor or a law enforcement officer' },
+  { code: 'P.C. 202', crime: 'Murder', months: 60, fine: 10000, description: 'Murder of a civilian or a local' },
+  { code: 'P.C. 203', crime: 'Attempted Capital Murder', months: 45, fine: 3000, description: 'The Attempted Murder of a government official' },
+  { code: 'P.C. 204', crime: 'Attempted Murder', months: 35, fine: 2000, description: 'The Attempted Murder of a civillan' },
+  { code: 'P.C. 205', crime: 'Aggravated Assault', months: 30, fine: 2000, description: 'When a person causes serious bodily harm to another' },
+  { code: 'P.C. 206', crime: 'Torture', months: 40, fine: 2000, description: 'The action or practice of inflicting severe pain or suffering on someone as a punishment or in order to force them to do or say something' },
+  { code: 'P.C. 207', crime: 'Serial Crime', months: 'Judge Discretion', fine: 20000, description: 'The conviction or proven commission of 4 or more separate Class A crimes within a 24-hour period or 8 in a 72-hour period. These must be separate incidents, in which the 4th occurrence enacts this penalty and MUST be confirmed/given by the AG, DA, ADA, or Judge' },
+  { code: 'P.C. 208', crime: 'Animal Abuse', months: 30, fine: 5000, description: 'Animal abuse is the act of causing physical, emotional, or sexual harm to an animal, or depriving it of basic needs. It can be intentional or unintentional.' },
+  { code: 'P.C. 209', crime: 'Kidnapping of a Government Official', months: 35, fine: 2000, description: 'When a person unlawfully restrains a government official against one\'s will' },
+  { code: 'P.C. 210', crime: 'Kidnapping', months: 25, fine: 900, description: 'When someone takes a civilian and holds them at will by force' },
+  { code: 'P.C. 211', crime: 'Major Armed Robbery', months: 30, fine: 20000, description: 'This is when someone uses force and robs a bank or fort' },
+  { code: 'P.C. 212', crime: 'Armed Robbery', months: 25, fine: 950, description: 'When someone robs a civilian or a General store' },
+  { code: 'P.C. 213', crime: 'Unarmed Robbery', months: 20, fine: 900, description: 'When someone robs a place or person without the use of a weapon' },
+  { code: 'P.C. 214', crime: 'Arson', months: 25, fine: 850, description: 'Arson is the crime of willfully and deliberately setting fire to or charring property' },
+  { code: 'P.C. 215', crime: 'Terrorism', months: 50, fine: 2500, description: 'the unlawful use of violence and intimidation, especially against civilians, in the pursuit of political aims.' },
+  { code: 'P.C. 216', crime: 'Riot', months: 30, fine: 2000, description: 'a public disturbance where three or more people behave in a violent and uncontrolled manner' },
+  { code: 'P.C. 217', crime: 'Government Corruption', months: 240, fine: 30000, description: 'the abuse of public power, office, or resources by elected government officials for personal gain, by extortion, soliciting or offering bribes.' },
+  { code: 'P.C. 218', crime: 'Extortion', months: 30, fine: 15000, description: 'Extortion takes place when someone threatens, pressures, or scares another person in order to receive money, goods, or services' },
+  { code: 'P.C. 219', crime: 'Bribery to a Government Official', months: 20, fine: 5000, description: 'the offering, giving, or soliciting of money or any item of value as a means of influencing the actions of an individual holding a public or legal duty.' },
+  { code: 'P.C. 220', crime: 'Vigilantism', months: 15, fine: 850, description: 'law enforcement undertaken without legal authority by a self-appointed group of people.' },
+  { code: 'P.C. 221', crime: 'Escaping From Custody', months: 30, fine: 1500, description: 'the departure without lawful authority or the failure to return to custody following an assignment or temporary leave granted for a specific purpose or limited period.' },
+  { code: 'P.C. 222', crime: 'Intent/Distribution of Illegal Contraband', months: 25, fine: 800, description: 'The Selling of a contraband item' },
+  { code: 'P.C. 223', crime: 'Possession of Illegal Contrabands', months: 10, fine: 650, description: 'The Possession of Contraband item' },
+  { code: 'P.C. 224', crime: 'Manufacture of Contraband', months: 20, fine: 750, description: 'Making of Contraband item' },
+  { code: 'P.C. 301', crime: 'Unarmed Assault', months: 10, fine: 550, description: 'That he possessed a specific or actual intent to cause the death of the person assaulted' },
+  { code: 'P.C. 302', crime: 'Evading or Resisting Arrest', months: 15, fine: 750, description: 'Fleeing away from Law Enforcment' },
+  { code: 'P.C. 303', crime: 'Aiding and Abetting', months: 10, fine: 800, description: 'Aiding or abetting a known fugitive of the law' },
+  { code: 'P.C. 304', crime: 'Obstruction of Justice', months: 10, fine: 600, description: 'is an act that involves unduly influencing, impeding, or otherwise interfering with the justice system' },
+  { code: 'P.C. 305', crime: 'False Impersonation', months: 15, fine: 600, description: 'when someone impersonates another person expressly for the purpose of defrauding others.' },
+  { code: 'P.C. 306', crime: 'Reckless Endangerment', months: 15, fine: 600, description: 'the offense of recklessly engaging in conduct that creates a substantial risk of serious physical injury or death to another person.' },
+  { code: 'P.C. 307', crime: 'Destruction of Property', months: 15, fine: 650, description: 'Damage or destruction of real or tangible personal property, caused by negligence' },
+  { code: 'P.C. 308', crime: 'Providing False Information', months: 10, fine: 750, description: 'Giving law enforcement false information' },
+  { code: 'P.C. 309', crime: 'Harassment', months: 15, fine: 750, description: 'aggressive pressure or intimidation.' },
+  { code: 'P.C. 310', crime: 'Disregarding a Lawful Order/Town Ordinance', months: 15, fine: 750, description: 'violations or failures to obey lawful general orders or regulations, failures to obey other lawful orders, and dereliction of duty' },
+  { code: 'P.C. 311', crime: 'Negligent Discharge of a Firearm', months: 15, fine: 650, description: 'an unintentional firing of a shot due to a violation of the Four Universal Firearms Safety Rules, or other improper weapon handling' },
+  { code: 'P.C. 312', crime: 'Cruelty to Domesticated Animals', months: 10, fine: 600, description: 'the crime of inflicting physical pain, suffering or death on an animal, usually a tame one, beyond necessity for normal discipline' },
+  { code: 'P.C. 313', crime: 'Conspiracy to Commit Any Act of Crime', months: 15, fine: 800, description: 'an agreement between two or more people to commit an illegal act, along with an intent to achieve the agreement\'s goal' },
+  { code: 'P.C. 314', crime: 'Disorderly Conduct', months: 10, fine: 650, description: 'unruly behavior constituting a minor offense.' },
+  { code: 'P.C. 315', crime: 'Disturbing the Peace', months: 10, fine: 650, description: 'an act of violent or noisy behavior that causes a public disturbance and is considered a criminal offense.' },
+  { code: 'P.C. 316', crime: 'Trespassing', months: 10, fine: 600, description: 'knowingly entering another owners\' property or land without permission' },
+  { code: 'P.C. 317', crime: 'Improper Commercial Sales', months: 10, fine: 600, description: 'Not having the right licenses to sell' },
+  { code: 'P.C. 318', crime: 'Illegal Panning/Mining', months: 15, fine: 600, description: 'mining activity that is undertaken without state permission, in particular in absence of land rights, mining licenses, and exploration or mineral transportation permits' },
+  { code: 'P.C. 319', crime: 'Loitering/Obstruction of Traffic', months: 10, fine: 600, description: 'Obstruction of Traffic means the intentional act of walking, standing, sitting, lying, or placing, or use of an object in any manner that results in the interference, slowing, or interruption of the passage of the normal flow of traffic on the Road.' }
 ];
 
 export class PenalCodeProcessor {
@@ -57,8 +59,8 @@ export class PenalCodeProcessor {
           crime: data.crime,
           months: typeof data.months === 'number' ? data.months : data.months,
           fine: typeof data.fine === 'number' ? data.fine : data.fine,
-          class: data.class || '',
-          code: this.getPenalCodeNumber(data.crime)
+          description: data.description || 'No description available',
+          code: data.code || 'PC-XXX'
         });
       }
     });
@@ -67,53 +69,10 @@ export class PenalCodeProcessor {
   }
 
   getPenalCodeNumber(crime) {
-    // Assign penal code numbers based on crime severity and type
-    const codeMap = {
-      'capital murder': 'PC-001',
-      'murder': 'PC-002', 
-      'attempted capital murder': 'PC-003',
-      'attempted murder': 'PC-004',
-      'aggravated assault': 'PC-005',
-      'torture': 'PC-006',
-      'serial crime': 'PC-007',
-      'kidnapping of a government official': 'PC-008',
-      'kidnapping': 'PC-009',
-      'major armed robbery': 'PC-010',
-      'armed robbery': 'PC-011',
-      'unarmed robbery': 'PC-012',
-      'arson': 'PC-013',
-      'terrorism': 'PC-014',
-      'riot': 'PC-015',
-      'government corruption': 'PC-016',
-      'extortion': 'PC-017',
-      'bribery to a government official': 'PC-018',
-      'vigilantism': 'PC-019',
-      'escaping from custody': 'PC-020',
-      'intent/distribution of illegal contraband': 'PC-021',
-      'possession of illegal contraband': 'PC-022',
-      'manufacture of contraband': 'PC-023',
-      'unarmed assault': 'PC-024',
-      'evading or resisting arrest': 'PC-025',
-      'aiding and abetting': 'PC-026',
-      'obstruction of justice': 'PC-027',
-      'false impersonation': 'PC-028',
-      'reckless endangerment': 'PC-029',
-      'destruction of property': 'PC-030',
-      'providing false information': 'PC-031',
-      'harassment': 'PC-032',
-      'disregarding a lawful order/town ordinance': 'PC-033',
-      'negligent discharge of a firearm': 'PC-034',
-      'cruelty to domesticated animals': 'PC-035',
-      'conspiracy to commit any act of crime': 'PC-036',
-      'disorderly conduct': 'PC-037',
-      'disturbing the peace': 'PC-038',
-      'trespassing': 'PC-039',
-      'improper commercial sales': 'PC-040',
-      'illegal panning/mining': 'PC-041',
-      'loitering/obstruction of traffic': 'PC-042'
-    };
-    
-    return codeMap[crime.toLowerCase()] || 'PC-XXX';
+    // The penal code number is now stored directly in the data
+    // This method is kept for backward compatibility but the actual code
+    // is now loaded from the embedded data
+    return 'PC-XXX';
   }
 
   // Method to handle multiple crimes separated by commas
@@ -255,6 +214,7 @@ export class PenalCodeProcessor {
       'selling moonshine': 'Intent/Distribution of Illegal Contraband',
       'selling k': 'Intent/Distribution of Illegal Contraband',
       'carrying drugs': 'Possession of Illegal Contrabands',
+      'carry drugs': 'Possession of Illegal Contrabands',
       'carrying cocaine': 'Possession of Illegal Contrabands',
       'carrying meth': 'Possession of Illegal Contrabands',
       'carrying heroin': 'Possession of Illegal Contrabands',
@@ -409,9 +369,9 @@ export class PenalCodeProcessor {
         title: penalData.crime,
         months: months,
         fine: fine,
-        class: penalData.class || 'N/A',
         code: penalData.code || 'PC-XXX',
-        description: `**Penal Code:** ${penalData.code || 'PC-XXX'}\n**Sentence:** ${months} months\n**Fine:** ${fine}\n**Class:** ${penalData.class || 'N/A'}`
+        description: penalData.description || 'No description available',
+        fullDescription: `**Penal Code:** ${penalData.code || 'PC-XXX'}\n**Sentence:** ${months} months\n**Fine:** ${fine}\n**Description:** ${penalData.description || 'No description available'}`
       };
     }
 

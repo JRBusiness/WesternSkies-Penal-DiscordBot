@@ -135,7 +135,7 @@ function handlePenalCommand(interaction) {
     multipleResults.forEach((penalData, index) => {
       const formatted = penalProcessor.formatPenalCode(penalData);
       embed.fields.push({
-        name: `${index + 1}. ${formatted.title}`,
+        name: `${index + 1}. ${formatted.title} (${penalData.code})`,
         value: `**${formatted.months} months** imprisonment and **${formatted.fine}** fine`,
         inline: false
       });
@@ -175,11 +175,18 @@ function handlePenalCommand(interaction) {
     color: 0xdc143c,
     title: `${formatted.title}`,
     description: formatted.description,
-    fields: [{
-      name: 'Penalty Summary',
-      value: `**${formatted.months} months** imprisonment and **${formatted.fine}** fine`,
-      inline: false
-    }],
+    fields: [
+      {
+        name: 'Penal Code',
+        value: `**${formatted.code}**`,
+        inline: true
+      },
+      {
+        name: 'Penalty Summary',
+        value: `**${formatted.months} months** imprisonment and **${formatted.fine}** fine`,
+        inline: false
+      }
+    ],
     footer: {
       text: `Search term: "${crimeInput}"`
     },
@@ -218,6 +225,18 @@ function handleSearchCommand(interaction) {
     color: 0x4169e1,
     title: `Search Result: ${formatted.title}`,
     description: formatted.description,
+    fields: [
+      {
+        name: 'Penal Code',
+        value: `**${formatted.code}**`,
+        inline: true
+      },
+      {
+        name: 'Penalty Summary',
+        value: `**${formatted.months} months** imprisonment and **${formatted.fine}** fine`,
+        inline: false
+      }
+    ],
     footer: {
       text: `Search term: "${keyword}"`
     },
@@ -415,11 +434,18 @@ function handlePenalCodeCommand(interaction) {
     color: 0x32cd32,
     title: `${formatted.title}`,
     description: formatted.description,
-    fields: [{
-      name: 'Penalty Summary',
-      value: `**${formatted.months} months** imprisonment and **${formatted.fine}** fine`,
-      inline: false
-    }],
+    fields: [
+      {
+        name: 'Penal Code',
+        value: `**${formatted.code}**`,
+        inline: true
+      },
+      {
+        name: 'Penalty Summary',
+        value: `**${formatted.months} months** imprisonment and **${formatted.fine}** fine`,
+        inline: false
+      }
+    ],
     footer: {
       text: `Penal Code: ${fullCode}`
     },

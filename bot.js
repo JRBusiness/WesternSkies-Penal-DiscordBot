@@ -169,7 +169,7 @@ async function handlePenalCommand(interaction) {
     multipleResults.forEach((penalData, index) => {
       const formatted = penalProcessor.formatPenalCode(penalData);
       embed.addFields({
-        name: `${index + 1}. ${formatted.title}`,
+        name: `${index + 1}. ${formatted.title} (${penalData.code})`,
         value: `**${formatted.months} months** imprisonment and **${formatted.fine}** fine`,
         inline: false
       });
@@ -211,11 +211,18 @@ async function handlePenalCommand(interaction) {
     .setColor('#dc143c')
     .setTitle(`${formatted.title}`)
     .setDescription(formatted.description)
-    .addFields({
-      name: 'Penalty Summary',
-      value: `**${formatted.months} months** imprisonment and **${formatted.fine}** fine`,
-      inline: false
-    })
+    .addFields(
+      {
+        name: 'Penal Code',
+        value: `**${formatted.code}**`,
+        inline: true
+      },
+      {
+        name: 'Penalty Summary',
+        value: `**${formatted.months} months** imprisonment and **${formatted.fine}** fine`,
+        inline: false
+      }
+    )
     .setFooter({ text: `Search term: "${crimeInput}"` })
     .setTimestamp();
     
@@ -244,6 +251,18 @@ async function handleSearchCommand(interaction) {
     .setColor('#4169e1')
     .setTitle(`Search Result: ${formatted.title}`)
     .setDescription(formatted.description)
+    .addFields(
+      {
+        name: 'Penal Code',
+        value: `**${formatted.code}**`,
+        inline: true
+      },
+      {
+        name: 'Penalty Summary',
+        value: `**${formatted.months} months** imprisonment and **${formatted.fine}** fine`,
+        inline: false
+      }
+    )
     .setFooter({ text: `Search term: "${keyword}"` })
     .setTimestamp();
     
@@ -434,11 +453,18 @@ async function handlePenalCodeCommand(interaction) {
     .setColor('#32cd32')
     .setTitle(`${formatted.title}`)
     .setDescription(formatted.description)
-    .addFields({
-      name: 'Penalty Summary',
-      value: `**${formatted.months} months** imprisonment and **${formatted.fine}** fine`,
-      inline: false
-    })
+    .addFields(
+      {
+        name: 'Penal Code',
+        value: `**${formatted.code}**`,
+        inline: true
+      },
+      {
+        name: 'Penalty Summary',
+        value: `**${formatted.months} months** imprisonment and **${formatted.fine}** fine`,
+        inline: false
+      }
+    )
     .setFooter({ text: `Penal Code: ${fullCode}` })
     .setTimestamp();
     

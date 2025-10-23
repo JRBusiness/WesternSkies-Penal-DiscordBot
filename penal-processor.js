@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 export class PenalCodeProcessor {
-  constructor(csvFilePath = 'penal.csv') {
+  constructor(csvFilePath = 'data.csv') {
     this.csvFilePath = csvFilePath;
     this.penalCodes = new Map();
     this.loadPenalCodes();
@@ -17,16 +17,35 @@ export class PenalCodeProcessor {
       for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
         if (line) {
-          const [crime, months, fine, crimeClass] = line.split(',').map(col => col.trim());
-          
-          if (crime && crime !== 'None') {
-            this.penalCodes.set(crime.toLowerCase(), {
-              crime,
-              months: parseInt(months) || 0,
-              fine: this.parseFine(fine),
-              class: crimeClass || '',
-              code: this.getPenalCodeNumber(crime)
-            });
+          // Parse CSV with proper handling of commas in descriptions
+          const columns = this.parseCSVLine(line);
+          if (columns.length >= 5) {
+            // Handle the case where there might be empty columns due to tabs
+            const penalCode = columns[0];
+            const crime = columns[1];
+            const months = columns[2] || columns[3]; // Try column 2 first, then 3
+            const fine = columns[3] || columns[4]; // Try column 3 first, then 4
+            const description = columns[4] || columns[5]; // Try column 4 first, then 5
+            
+            if (crime && crime !== 'None' && crime.trim() !== '') {
+              // This is a main crime row
+              this.penalCodes.set(crime.toLowerCase(), {
+                crime: crime.trim(),
+                months: this.parseMonths(months),
+                fine: this.parseFine(fine),
+                description: description.trim(),
+                code: penalCode.trim()
+              });
+            } else if (penalCode && penalCode.endsWith('1') && fine.trim() !== '') {
+              // This is a fine-only row (like P.C. 2231)
+              const baseCode = penalCode.replace(/1$/, ''); // Remove trailing 1
+              for (const [key, value] of this.penalCodes) {
+                if (value.code === baseCode) {
+                  value.fine = this.parseFine(fine);
+                  break;
+                }
+              }
+            }
           }
         }
       }
@@ -35,6 +54,36 @@ export class PenalCodeProcessor {
     } catch (error) {
       console.error('Error loading penal codes:', error);
     }
+  }
+
+  parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if ((char === ',' || char === '\t') && !inQuotes) {
+        result.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    
+    result.push(current.trim());
+    return result;
+  }
+
+  parseMonths(months) {
+    if (!months || months.toLowerCase().includes('judge') || months.toLowerCase().includes('discretion')) {
+      return 'Judge Discretion';
+    }
+    const numericMonths = parseInt(months);
+    return isNaN(numericMonths) ? months : numericMonths;
   }
 
   parseFine(fine) {
@@ -46,53 +95,10 @@ export class PenalCodeProcessor {
   }
 
   getPenalCodeNumber(crime) {
-    // Assign penal code numbers based on crime severity and type
-    const codeMap = {
-      'capital murder': 'PC-001',
-      'murder': 'PC-002', 
-      'attempted capital murder': 'PC-003',
-      'attempted murder': 'PC-004',
-      'aggravated assault': 'PC-005',
-      'torture': 'PC-006',
-      'serial crime': 'PC-007',
-      'kidnapping of a government official': 'PC-008',
-      'kidnapping': 'PC-009',
-      'major armed robbery': 'PC-010',
-      'armed robbery': 'PC-011',
-      'unarmed robbery': 'PC-012',
-      'arson': 'PC-013',
-      'terrorism': 'PC-014',
-      'riot': 'PC-015',
-      'government corruption': 'PC-016',
-      'extortion': 'PC-017',
-      'bribery to a government official': 'PC-018',
-      'vigilantism': 'PC-019',
-      'escaping from custody': 'PC-020',
-      'intent/distribution of illegal contraband': 'PC-021',
-      'possession of illegal contraband': 'PC-022',
-      'manufacture of contraband': 'PC-023',
-      'unarmed assault': 'PC-024',
-      'evading or resisting arrest': 'PC-025',
-      'aiding and abetting': 'PC-026',
-      'obstruction of justice': 'PC-027',
-      'false impersonation': 'PC-028',
-      'reckless endangerment': 'PC-029',
-      'destruction of property': 'PC-030',
-      'providing false information': 'PC-031',
-      'harassment': 'PC-032',
-      'disregarding a lawful order/town ordinance': 'PC-033',
-      'negligent discharge of a firearm': 'PC-034',
-      'cruelty to domesticated animals': 'PC-035',
-      'conspiracy to commit any act of crime': 'PC-036',
-      'disorderly conduct': 'PC-037',
-      'disturbing the peace': 'PC-038',
-      'trespassing': 'PC-039',
-      'improper commercial sales': 'PC-040',
-      'illegal panning/mining': 'PC-041',
-      'loitering/obstruction of traffic': 'PC-042'
-    };
-    
-    return codeMap[crime.toLowerCase()] || 'PC-XXX';
+    // The penal code number is now stored directly in the data
+    // This method is kept for backward compatibility but the actual code
+    // is now loaded from the CSV file
+    return 'PC-XXX';
   }
 
   // Method to handle multiple crimes separated by commas
@@ -234,6 +240,7 @@ export class PenalCodeProcessor {
       'selling moonshine': 'Intent/Distribution of Illegal Contraband',
       'selling k': 'Intent/Distribution of Illegal Contraband',
       'carrying drugs': 'Possession of Illegal Contrabands',
+      'carry drugs': 'Possession of Illegal Contrabands',
       'carrying cocaine': 'Possession of Illegal Contrabands',
       'carrying meth': 'Possession of Illegal Contrabands',
       'carrying heroin': 'Possession of Illegal Contrabands',
@@ -379,9 +386,9 @@ export class PenalCodeProcessor {
         title: penalData.crime,
         months: penalData.months || 0,
         fine: fine,
-        class: penalData.class || 'N/A',
         code: penalData.code || 'PC-XXX',
-        description: `**Penal Code:** ${penalData.code || 'PC-XXX'}\n**Sentence:** ${penalData.months || 0} months\n**Fine:** ${fine}\n**Class:** ${penalData.class || 'N/A'}`
+        description: penalData.description || 'No description available',
+        fullDescription: `**Penal Code:** ${penalData.code || 'PC-XXX'}\n**Sentence:** ${penalData.months || 0} months\n**Fine:** ${fine}\n**Description:** ${penalData.description || 'No description available'}`
       };
     }
 
